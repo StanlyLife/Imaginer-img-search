@@ -1,40 +1,43 @@
-const curatedPhotosUrl = "https://api.pexels.com/v1/curated?per_page=15&page=1";
-
 const auth = "563492ad6f91700001000001654b390e09844ea29f9b0c7478a231180";
 const gallery = document.querySelector(".gallery");
 const searchInput = document.querySelector(".search-input");
 const form = document.querySelector(".search-form");
 const more = document.querySelector(".more");
 
+let fetchLink;
 let searchValue;
 let page = 1;
+let currentSearch;
 
 searchInput.addEventListener("input", updateInput);
 form.addEventListener("submit", (e) => {
   e.preventDefault();
+  currentSearch = searchValue;
   searchPhotos(searchValue);
 });
 
 more.addEventListener("click", loadMore);
 
 async function curatedPhotos() {
-  const data = await fetchApi(curatedPhotosUrl);
-  generatePictures(data);
-}
-
-function updateInput(e) {
-  searchValue = e.target.value;
-}
-
-async function searchPhotos(query) {
   const data = await fetchApi(
-    `https://api.pexels.com/v1/search?query=${query}+query&per_page=15&page=1`
+    "https://api.pexels.com/v1/curated?per_page=15&page=1"
   );
   generatePictures(data);
 }
 
-async function fetchApi(url) {
+function updateInput(e) {
+  fetchLink = "https://api.pexels.com/v1/curated?per_page=15&page=1";
+  searchValue = e.target.value;
+}
+
+async function searchPhotos(query) {
   clear();
+  fetchLink = `https://api.pexels.com/v1/search?query=${query}+query&per_page=15&page=1`;
+  const data = await fetchApi(fetchLink);
+  generatePictures(data);
+}
+
+async function fetchApi(url) {
   const dataFetch = await fetch(url, {
     method: "GET",
     headers: {
@@ -62,9 +65,20 @@ function generatePictures(data) {
   });
 }
 
-async function loadMore() {}
+async function loadMore() {
+  page++;
+  if (currentSearch) {
+    fetchLink = `https://api.pexels.com/v1/search?query=${currentSearch}+query&per_page=15&page=${page}`;
+  } else {
+    fetchLink = `https://api.pexels.com/v1/curated?per_page=15&page=${page}`;
+  }
+  const data = await fetchApi(fetchLink);
+  generatePictures(data);
+}
 
 function clear() {
   gallery.innerHTML = "";
   searchInput.value = "";
 }
+
+curatedPhotos();
