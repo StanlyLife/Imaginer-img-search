@@ -1,0 +1,48 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --logo-color: #555;
+}
+
+body {
+  background-color: snow;
+}
+
+header {
+  display: flex;
+  flex-direction: column;
+  min-height: 30vh;
+  justify-content: center;
+  align-items: center;
+}
+
+header h2 {
+  padding: 2rem;
+}
+
+#logo {
+  font-family: "lobster", Helvetica, sans-serif;
+  font-size: 3rem;
+  text-decoration: none;
+  color: var(--logo-color);
+}
+
+.search-form input {
+  font-size: 2rem;
+  padding: 0.5rem;
+  width: 100%;
+  border: none;
+  border: 1px solid indianred;
+}
+
+.search-form button {
+  color: snow;
+  border: none;
+  padding: 0.5rem;
+  font-size: 1rem;
+  background: var(--logo-color);
+}
